@@ -1,8 +1,10 @@
 import React from 'react'
 import Stripe from 'stripe'
 import { currentUser } from '@clerk/nextjs'
-import { db } from '@/lib/db'
 import BillingDashboard from './_components/billing-dashboard'
+
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
 
 type Props = {
   searchParams?: { [key: string]: string | undefined }
@@ -21,6 +23,8 @@ const Billing = async (props: Props) => {
     const session = await stripe.checkout.sessions.listLineItems(session_id)
     const user = await currentUser()
     if (user) {
+      // Import db dynamically to avoid build-time execution
+      const { db } = await import('@/lib/db')
       await db.user.update({
         where: {
           clerkId: user.id,
