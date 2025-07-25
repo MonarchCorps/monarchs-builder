@@ -2,9 +2,14 @@ import { google } from 'googleapis'
 import { auth, clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
-import { db } from '@/lib/db'
+
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function GET() {
+  // Import db dynamically to avoid build-time execution
+  const { db } = await import('@/lib/db')
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,

@@ -1,12 +1,17 @@
 import { postContentToWebHook } from '@/app/(main)/(pages)/connections/_actions/discord-connection'
 import { onCreateNewPageInDatabase } from '@/app/(main)/(pages)/connections/_actions/notion-connection'
 import { postMessageToSlack } from '@/app/(main)/(pages)/connections/_actions/slack-connection'
-import { db } from '@/lib/db'
 import axios from 'axios'
 import { headers } from 'next/headers'
 import { NextRequest } from 'next/server'
 
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(req: NextRequest) {
+  // Import db dynamically to avoid build-time execution
+  const { db } = await import('@/lib/db')
   console.log('🔴 Changed')
   const headersList = headers()
   let channelResourceId

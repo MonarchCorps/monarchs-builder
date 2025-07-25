@@ -1,7 +1,12 @@
-import { db } from '@/lib/db'
 import { NextResponse } from 'next/server'
 
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(req: Request) {
+  // Import db dynamically to avoid build-time execution
+  const { db } = await import('@/lib/db')
   try {
     const body = await req.json()
     const { id, email_addresses, first_name, image_url } = body?.data
