@@ -2,10 +2,9 @@ import { CONNECTIONS } from '@/lib/constant'
 import React from 'react'
 import ConnectionCard from './_components/connection-card'
 import { currentUser } from '@clerk/nextjs'
-import { onDiscordConnect } from './_actions/discord-connection'
-import { onNotionConnect } from './_actions/notion-connection'
-import { onSlackConnect } from './_actions/slack-connection'
-import { getUserData } from './_actions/get-user'
+
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
 
 type Props = {
   searchParams?: { [key: string]: string | undefined }
@@ -57,6 +56,13 @@ const Connections = async (props: Props) => {
 
   const onUserConnections = async () => {
     console.log(database_id)
+    
+    // Import functions dynamically to avoid build-time execution
+    const { onDiscordConnect } = await import('./_actions/discord-connection')
+    const { onNotionConnect } = await import('./_actions/notion-connection')
+    const { onSlackConnect } = await import('./_actions/slack-connection')
+    const { getUserData } = await import('./_actions/get-user')
+    
     await onDiscordConnect(
       channel_id!,
       webhook_id!,
