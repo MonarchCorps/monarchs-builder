@@ -66,7 +66,15 @@ const EditorCanvas = (props: Props) => {
   )
 
   const onConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
+    (params: Edge | Connection) => {
+      console.log('🔗 CONNECTING NODES:', {
+        source: params.source,
+        target: params.target,
+        sourceHandle: params.sourceHandle,
+        targetHandle: params.targetHandle
+      })
+      setEdges((eds) => addEdge(params, eds))
+    },
     []
   )
 
@@ -78,8 +86,11 @@ const EditorCanvas = (props: Props) => {
         'application/reactflow'
       )
 
+      console.log('🎯 DROPPED NODE:', type)
+
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
+        console.log('❌ Invalid drop type')
         return
       }
 
@@ -88,6 +99,7 @@ const EditorCanvas = (props: Props) => {
       )
 
       if (type === 'Trigger' && triggerAlreadyExists) {
+        console.log('❌ Trigger already exists')
         toast('Only one trigger can be added to automations at the moment')
         return
       }
@@ -142,8 +154,55 @@ const EditorCanvas = (props: Props) => {
   }
 
   useEffect(() => {
+    console.log('🌳 WORKFLOW TREE STRUCTURE:')
+    console.log('📦 Nodes:', nodes.map(node => ({
+      id: node.id,
+      type: node.type,
+      title: node.data.title,
+      position: node.position
+    })))
+    console.log('🔗 Edges:', edges.map(edge => ({
+      id: edge.id,
+      source: edge.source,
+      target: edge.target
+    })))
+    
+    // Show the flow path
+    if (edges.length > 0) {
+      console.log('🔄 FLOW PATH:')
+      const flowPath = buildFlowPath(nodes, edges)
+      console.log('Flow sequence:', flowPath)
+    }
+    
     dispatch({ type: 'LOAD_DATA', payload: { edges, elements: nodes } })
   }, [nodes, edges])
+  
+  // Helper function to build the flow path
+  const buildFlowPath = (nodes: any[], edges: any[]): string[] => {
+    const nodeMap = new Map(nodes.map(node => [node.id, node]))
+    const flowPath: string[] = []
+    
+    // Find the trigger (starting point)
+    const trigger = nodes.find(node => node.type === 'Trigger')
+    if (!trigger) return flowPath
+    
+    let currentNode: any = trigger
+    flowPath.push(currentNode.type)
+    
+    // Follow the edges to build the path
+    while (currentNode) {
+      const edge = edges.find(e => e.source === currentNode.id)
+      if (!edge) break
+      
+      const nextNode = nodeMap.get(edge.target)
+      if (!nextNode) break
+      
+      flowPath.push(nextNode.type)
+      currentNode = nextNode
+    }
+    
+    return flowPath
+  }
 
   const nodeTypes = useMemo(
     () => ({
