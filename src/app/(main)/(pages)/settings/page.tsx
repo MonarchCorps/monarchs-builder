@@ -1,8 +1,10 @@
 import ProfileForm from '@/components/forms/profile-form'
 import React from 'react'
 import ProfilePicture from './_components/profile-picture'
-import { db } from '@/lib/db'
 import { currentUser } from '@clerk/nextjs'
+
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
 
 type Props = {}
 
@@ -10,6 +12,8 @@ const Settings = async (props: Props) => {
   const authUser = await currentUser()
   if (!authUser) return null
 
+  // Import db dynamically to avoid build-time execution
+  const { db } = await import('@/lib/db')
   const user = await db.user.findUnique({ where: { clerkId: authUser.id } })
   const removeProfileImage = async () => {
     'use server'
