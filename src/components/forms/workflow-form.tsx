@@ -23,7 +23,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { onCreateWorkflow } from '@/app/(main)/(pages)/workflows/_actions/workflow-connections'
+// Import will be done dynamically
 import { useModal } from '@/providers/modal-provider'
 
 type Props = {
@@ -46,6 +46,7 @@ const Workflowform = ({ subTitle, title }: Props) => {
   const router = useRouter()
 
   const handleSubmit = async (values: z.infer<typeof WorkflowFormSchema>) => {
+    const { onCreateWorkflow } = await import('@/app/(main)/(pages)/workflows/_actions/workflow-connections')
     const workflow = await onCreateWorkflow(values.name, values.description)
     if (workflow) {
       toast.message(workflow.message)

@@ -13,7 +13,7 @@ import Image from 'next/image'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
-import { onFlowPublish } from '../_actions/workflow-connections'
+// Import will be done dynamically
 
 type Props = {
   name: string
@@ -24,6 +24,7 @@ type Props = {
 
 const Workflow = ({ description, id, name, publish }: Props) => {
   const onPublishFlow = async (event: any) => {
+    const { onFlowPublish } = await import('../_actions/workflow-connections')
     const response = await onFlowPublish(
       id,
       event.target.ariaChecked === 'false'

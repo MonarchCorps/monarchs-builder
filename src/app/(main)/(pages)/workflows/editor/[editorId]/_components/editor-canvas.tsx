@@ -28,7 +28,7 @@ import { v4 } from 'uuid'
 import { EditorCanvasDefaultCardTypes } from '@/lib/constant'
 import FlowInstance from './flow-instance'
 import EditorCanvasSidebar from './editor-canvas-sidebar'
-import { onGetNodesEdges } from '../../../_actions/workflow-connections'
+// Import will be done dynamically
 
 type Props = {}
 
@@ -224,6 +224,7 @@ const EditorCanvas = (props: Props) => {
 
   const onGetWorkFlow = async () => {
     setIsWorkFlowLoading(true)
+    const { onGetNodesEdges } = await import('../../../_actions/workflow-connections')
     const response = await onGetNodesEdges(pathname.split('/').pop()!)
     if (response) {
       setEdges(JSON.parse(response.edges!))

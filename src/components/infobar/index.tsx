@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/tooltip'
 import { UserButton } from '@clerk/nextjs'
 import { useBilling } from '@/providers/billing-provider'
-import { onPaymentDetails } from '@/app/(main)/(pages)/billing/_actions/payment-connecetions'
+// Import will be done dynamically
 
 type Props = {}
 
@@ -21,6 +21,7 @@ const InfoBar = (props: Props) => {
   const { credits, tier, setCredits, setTier } = useBilling()
 
   const onGetPayment = async () => {
+    const { onPaymentDetails } = await import('@/app/(main)/(pages)/billing/_actions/payment-connecetions')
     const response = await onPaymentDetails()
     if (response) {
       setTier(response.tier!)
