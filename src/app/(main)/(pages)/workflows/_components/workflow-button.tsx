@@ -1,5 +1,8 @@
 'use client'
 import Workflowform from '@/components/forms/workflow-form'
+
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
 import CustomModal from '@/components/global/custom-modal'
 import { Button } from '@/components/ui/button'
 import { useBilling } from '@/providers/billing-provider'

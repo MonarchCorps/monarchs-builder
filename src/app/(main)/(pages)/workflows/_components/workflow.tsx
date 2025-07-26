@@ -1,4 +1,7 @@
 import React from 'react'
+
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
 import {
   Card,
   CardDescription,

@@ -2,6 +2,9 @@ import React from 'react'
 import WorkflowButton from './_components/workflow-button'
 import Workflows from './_components'
 
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
+
 type Props = {}
 
 const Page = (props: Props) => {

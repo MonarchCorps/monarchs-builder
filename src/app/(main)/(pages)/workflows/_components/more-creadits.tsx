@@ -1,5 +1,8 @@
 'use client'
 import React from 'react'
+
+// Force dynamic rendering to avoid build-time execution
+export const dynamic = 'force-dynamic'
 import { useBilling } from '@/providers/billing-provider'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 
