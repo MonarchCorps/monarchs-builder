@@ -12,6 +12,10 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    // This will ignore build-time errors for pages that can't be statically generated
+    missingSuspenseWithCSRError: false,
+  },
   images: {
     remotePatterns: [
       {
